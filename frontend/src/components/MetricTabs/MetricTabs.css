@@ -1,0 +1,34 @@
+.metric-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.metric-tabs__button {
+  min-height: 30px;
+  padding: 5px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #ffffff;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.metric-tabs__button:hover {
+  background: var(--canvas-subtle);
+}
+
+.metric-tabs__button--active {
+  border-color: rgba(9, 105, 218, 0.45);
+  background: #ddf4ff;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+@media (max-width: 640px) {
+  .metric-tabs {
+    justify-content: flex-start;
+    margin-top: 12px;
+  }
+}
