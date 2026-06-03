@@ -1,22 +1,14 @@
-import { getIntensityLevel, getMetricValue } from "../../utils/activity.js";
-import { formatDate } from "../../utils/date.js";
-import {
-  formatMetricLabel,
-  formatNumber,
-  formatSingularMetricLabel,
-} from "../../utils/format.js";
+import { getIntensityLevel } from '../../utils/activity.js';
+import { formatDate } from '../../utils/date.js';
 
-export function ContributionCell({ day, metricKey, scale, onTooltipChange, onTooltipHide }) {
-  const value = getMetricValue(day, metricKey);
-  const level = getIntensityLevel(value, scale);
-  const metricLabel = formatMetricLabel(metricKey).toLowerCase();
-  const valueLabel = value === 1 ? formatSingularMetricLabel(metricKey) : metricLabel;
-  const ariaLabel = `${formatNumber(value)} ${valueLabel} on ${formatDate(day.date)}`;
+export function ContributionCell({ day, scale, baseline, onTooltipChange, onTooltipHide, onClick }) {
+  const level = getIntensityLevel(day.value, scale, baseline);
+  const hasData = day.value > 0;
+  const valueText = hasData ? `${day.value}` : 'No data';
+  const ariaLabel = `${valueText} on ${formatDate(day.date)}`;
 
   function showTooltip(event) {
-    if (day.isFuture) {
-      return;
-    }
+    if (day.isFuture) return;
 
     const rect = event.currentTarget.getBoundingClientRect();
     const eventX = event.clientX || rect.left + rect.width / 2;
@@ -26,24 +18,34 @@ export function ContributionCell({ day, metricKey, scale, onTooltipChange, onToo
     onTooltipChange({
       x: safeX,
       y: eventY,
-      count: value,
-      metricLabel: valueLabel,
+      value: day.value,
+      note: day.note,
       date: formatDate(day.date),
     });
   }
 
+  const classNames = [
+    'contribution-cell',
+    day.isFuture ? 'contribution-cell--future' : '',
+    day.isToday ? 'contribution-cell--today' : '',
+    onClick && !day.isFuture ? 'contribution-cell--clickable' : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
+
   return (
     <button
       type="button"
-      className={`contribution-cell${day.isFuture ? " contribution-cell--future" : ""}`}
+      className={classNames}
       data-level={level}
-      aria-label={day.isFuture ? "Future date" : ariaLabel}
+      aria-label={day.isFuture ? 'Future date' : ariaLabel}
       tabIndex={day.isFuture ? -1 : 0}
       onMouseEnter={showTooltip}
       onMouseMove={showTooltip}
       onMouseLeave={onTooltipHide}
       onFocus={showTooltip}
       onBlur={onTooltipHide}
+      onClick={onClick && !day.isFuture ? onClick : undefined}
     />
   );
 }

@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Build output
+frontend/dist/
+frontend/build/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Runtime data
+backend/data.json
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Package locks (keep package-lock.json, ignore yarn/pnpm)
+yarn.lock
+pnpm-lock.yaml

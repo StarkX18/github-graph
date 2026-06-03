@@ -1,0 +1,36 @@
+.modal--data {
+  max-width: 380px;
+}
+
+.data-modal__graph-name {
+  margin: 2px 0 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.data-modal__value-input {
+  font-size: 22px !important;
+  font-weight: 600 !important;
+  padding: 10px 14px !important;
+}
+
+.data-modal__note-input {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.data-modal__delete-btn {
+  border: 1px solid #cf222e;
+  background: transparent;
+  color: #cf222e;
+}
+
+.data-modal__delete-btn:hover {
+  background: #fff1f0;
+}
+
+.data-modal__footer-right {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}

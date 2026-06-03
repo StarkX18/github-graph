@@ -1,13 +1,20 @@
-import { LEVEL_COLORS } from "../../data/metrics.js";
-import "./Legend.css";
+import { COLOR_SCHEMES, DEFAULT_SCHEME } from '../../data/colorSchemes.js';
+import './Legend.css';
 
-export function Legend() {
+export function Legend({ colorScheme }) {
+  const colors = COLOR_SCHEMES[colorScheme]?.levels ?? COLOR_SCHEMES[DEFAULT_SCHEME].levels;
+
   return (
-    <div className="legend" aria-label="Contribution intensity legend">
+    <div className="legend" aria-label="Activity intensity legend">
       <span>Less</span>
       <span className="legend__cells" aria-hidden="true">
-        {LEVEL_COLORS.map((color, index) => (
-          <span className="legend__cell" key={color} style={{ background: color }} title={`Level ${index}`} />
+        {colors.map((color, index) => (
+          <span
+            className="legend__cell"
+            key={index}
+            style={{ background: color }}
+            title={`Level ${index}`}
+          />
         ))}
       </span>
       <span>More</span>

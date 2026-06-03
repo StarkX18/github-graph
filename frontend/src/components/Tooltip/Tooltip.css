@@ -26,6 +26,20 @@
   transform: translateX(-50%) rotate(45deg);
 }
 
+.tooltip__value {
+  font-weight: 600;
+}
+
+.tooltip__note {
+  color: #c8d0d8;
+  font-size: 11px;
+  margin-top: 2px;
+  max-width: 180px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .tooltip__date {
   color: #d8dee4;
   font-weight: 400;

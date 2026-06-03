@@ -1,81 +1,47 @@
-import { useMemo, useState } from "react";
-import { Legend } from "../Legend/Legend.jsx";
-import { MetricTabs } from "../MetricTabs/MetricTabs.jsx";
-import { Tooltip } from "../Tooltip/Tooltip.jsx";
-import { ContributionCell } from "./ContributionCell.jsx";
-import { MonthLabels } from "./MonthLabels.jsx";
-import { WeekdayLabels } from "./WeekdayLabels.jsx";
-import {
-  buildGraphDays,
-  buildMonthLabels,
-  calculateScale,
-  getMetricValue,
-} from "../../utils/activity.js";
-import { formatMetricLabel, formatNumber } from "../../utils/format.js";
-import "./ContributionGraph.css";
+import { useMemo, useState } from 'react';
+import { Tooltip } from '../Tooltip/Tooltip.jsx';
+import { ContributionCell } from './ContributionCell.jsx';
+import { MonthLabels } from './MonthLabels.jsx';
+import { WeekdayLabels } from './WeekdayLabels.jsx';
+import { buildGraphDays, buildMonthLabels, calculateScale } from '../../utils/activity.js';
+import './ContributionGraph.css';
 
-export function ContributionGraph({ days, metricKeys, selectedMetric, onMetricChange }) {
+export function ContributionGraph({ days, baseline = 0, colors, onCellClick }) {
   const graphDays = useMemo(() => buildGraphDays(days), [days]);
   const monthLabels = useMemo(() => buildMonthLabels(graphDays), [graphDays]);
-  const scale = useMemo(() => calculateScale(graphDays, selectedMetric), [graphDays, selectedMetric]);
+  const scale = useMemo(() => calculateScale(graphDays, baseline), [graphDays, baseline]);
   const [tooltip, setTooltip] = useState(null);
 
-  const total = graphDays.reduce((sum, day) => {
-    if (day.isFuture) {
-      return sum;
-    }
-
-    return sum + getMetricValue(day, selectedMetric);
-  }, 0);
-
-  const metricLabel = formatMetricLabel(selectedMetric).toLowerCase();
+  const colorVars = colors
+    ? { '--level-1': colors[1], '--level-2': colors[2], '--level-3': colors[3], '--level-4': colors[4] }
+    : {};
 
   return (
-    <section className="activity-panel" aria-label="Activity graph">
-      <div className="activity-panel__header">
-        <div>
-          <p className="activity-panel__summary">
-            {formatNumber(total)} {metricLabel} in the last year
-          </p>
-          <p className="activity-panel__subtle">Showing {formatMetricLabel(selectedMetric)} by day</p>
-        </div>
-
-        <MetricTabs
-          metricKeys={metricKeys}
-          selectedMetric={selectedMetric}
-          onMetricChange={onMetricChange}
-        />
-      </div>
-
-      <div className="activity-panel__body">
-        <div className="activity-panel__scroll">
-          <div className="contribution-graph">
-            <MonthLabels months={monthLabels} />
-            <WeekdayLabels />
-
-            <div
-              className="contribution-graph__grid"
-              role="grid"
-              aria-label={`${formatMetricLabel(selectedMetric)} heatmap`}
-            >
-              {graphDays.map((day) => (
-                <ContributionCell
-                  day={day}
-                  key={day.date}
-                  metricKey={selectedMetric}
-                  scale={scale}
-                  onTooltipChange={setTooltip}
-                  onTooltipHide={() => setTooltip(null)}
-                />
-              ))}
-            </div>
+    <div className="contribution-graph-wrap">
+      <div className="activity-panel__scroll">
+        <div className="contribution-graph" style={colorVars}>
+          <MonthLabels months={monthLabels} />
+          <WeekdayLabels />
+          <div
+            className="contribution-graph__grid"
+            role="grid"
+            aria-label="Activity heatmap"
+          >
+            {graphDays.map((day) => (
+              <ContributionCell
+                day={day}
+                key={day.date}
+                scale={scale}
+                baseline={baseline}
+                onTooltipChange={setTooltip}
+                onTooltipHide={() => setTooltip(null)}
+                onClick={onCellClick ? () => onCellClick(day) : undefined}
+              />
+            ))}
           </div>
         </div>
-
-        <Legend />
       </div>
-
       {tooltip && <Tooltip tooltip={tooltip} />}
-    </section>
+    </div>
   );
 }

@@ -1,0 +1,132 @@
+.graph-card {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #ffffff;
+  overflow: hidden;
+  transition: box-shadow 0.15s;
+}
+
+.graph-card:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.graph-card__header {
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid var(--border-muted);
+}
+
+.graph-card__title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.graph-card__title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--text);
+}
+
+.graph-card__summary {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.graph-card__total {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.graph-card__empty {
+  font-style: italic;
+}
+
+.graph-card__body {
+  padding: 14px 16px 12px;
+}
+
+.graph-card__menu-wrap {
+  position: relative;
+}
+
+.graph-card__menu-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: background 0.1s, border-color 0.1s;
+}
+
+.graph-card__menu-btn:hover {
+  background: var(--canvas-subtle);
+  border-color: var(--border-muted);
+  color: var(--text);
+}
+
+.graph-card__menu-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+}
+
+.graph-card__menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  z-index: 101;
+  min-width: 160px;
+  padding: 4px 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 8px 24px rgba(140, 149, 159, 0.2);
+}
+
+.graph-card__menu button {
+  display: block;
+  width: 100%;
+  padding: 7px 14px;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.graph-card__menu button:hover {
+  background: var(--canvas-subtle);
+}
+
+.graph-card__menu-item--danger {
+  color: #cf222e !important;
+}
+
+.graph-card--hidden {
+  opacity: 0.45;
+}
+
+.graph-card--hidden:hover {
+  opacity: 0.7;
+}
+
+.graph-card__title--muted {
+  color: var(--muted);
+  font-weight: 500;
+}
