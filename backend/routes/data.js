@@ -1,5 +1,6 @@
 const express = require('express');
 const { load, save } = require('../db');
+const { dayRecordToResponse, sanitizeEntriesForSave } = require('../entryUtils');
 
 const router = express.Router();
 
@@ -8,16 +9,18 @@ router.get('/graph/:graphId', (req, res) => {
   res.json(
     dayData
       .filter((d) => d.graphId === req.params.graphId)
-      .map(({ date, value, note }) => ({ date, value, note }))
+      .map(dayRecordToResponse)
       .sort((a, b) => a.date.localeCompare(b.date)),
   );
 });
 
 router.put('/graph/:graphId/:date', (req, res) => {
-  const { value, note = '' } = req.body;
-  if (value == null || !Number.isFinite(Number(value))) {
-    return res.status(400).json({ error: 'value must be a number' });
+  const { entries } = req.body;
+  if (!Array.isArray(entries)) {
+    return res.status(400).json({ error: 'entries must be an array' });
   }
+
+  const sanitized = sanitizeEntriesForSave(entries);
 
   const db = load();
   if (!db.graphs.find((g) => g.id === req.params.graphId)) {
@@ -27,7 +30,20 @@ router.put('/graph/:graphId/:date', (req, res) => {
   const existing = db.dayData.findIndex(
     (d) => d.graphId === req.params.graphId && d.date === req.params.date,
   );
-  const entry = { graphId: req.params.graphId, date: req.params.date, value: Number(value), note };
+
+  if (sanitized.length === 0) {
+    if (existing >= 0) {
+      db.dayData.splice(existing, 1);
+      save(db);
+    }
+    return res.json({ date: req.params.date, value: 0, note: '', entries: [] });
+  }
+
+  const entry = {
+    graphId: req.params.graphId,
+    date: req.params.date,
+    entries: sanitized,
+  };
 
   if (existing >= 0) {
     db.dayData[existing] = entry;
@@ -35,7 +51,7 @@ router.put('/graph/:graphId/:date', (req, res) => {
     db.dayData.push(entry);
   }
   save(db);
-  res.json({ date: entry.date, value: entry.value, note: entry.note });
+  res.json(dayRecordToResponse(entry));
 });
 
 router.delete('/graph/:graphId/:date', (req, res) => {

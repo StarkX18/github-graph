@@ -30,11 +30,17 @@
   font-weight: 600;
 }
 
+.tooltip__meta {
+  color: #c8d0d8;
+  font-size: 11px;
+  margin-top: 2px;
+}
+
 .tooltip__note {
   color: #c8d0d8;
   font-size: 11px;
   margin-top: 2px;
-  max-width: 180px;
+  max-width: 220px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

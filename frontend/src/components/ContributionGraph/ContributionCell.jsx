@@ -20,6 +20,7 @@ export function ContributionCell({ day, scale, baseline, onTooltipChange, onTool
       y: eventY,
       value: day.value,
       note: day.note,
+      entries: day.entries,
       date: formatDate(day.date),
     });
   }

@@ -16,6 +16,7 @@ export function buildGraphDays(days) {
       date: dateKey,
       value: day?.value ?? 0,
       note: day?.note ?? '',
+      entries: day?.entries ?? [],
       isFuture: date > today,
       isToday: dateKey === todayKey,
     };
