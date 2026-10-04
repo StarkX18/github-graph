@@ -199,7 +199,7 @@ export default function App() {
           <span className="app-header__domain">{activeDomain.name}</span>
         )}
         {activeDomainId && (
-          <button className="app-header__add-graph" onClick={openAddGraph} title="Add graph">+</button>
+          <button type="button" className="app-header__add-graph mac-icon-btn" onClick={openAddGraph} title="Add graph">+</button>
         )}
       </header>
 
@@ -209,8 +209,8 @@ export default function App() {
             <div className="empty-state__icon" aria-hidden="true">◫</div>
             <p className="empty-state__title">No sheets yet</p>
             <p className="empty-state__subtitle">Create your first sheet to start tracking anything.</p>
-            <button className="empty-state__btn" onClick={handleAddDomain}>
-              + Create sheet
+            <button type="button" className="empty-state__btn mac-btn mac-btn--primary" onClick={handleAddDomain}>
+              Create sheet
             </button>
           </div>
         ) : !activeDomainId ? (

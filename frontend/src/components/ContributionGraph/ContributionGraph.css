@@ -84,8 +84,8 @@
 
 .contribution-cell:hover,
 .contribution-cell:focus-visible {
-  transform: scale(1.15);
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.25);
+  transform: scale(1.12);
+  box-shadow: 0 0 0 1.5px rgba(0, 0, 0, 0.35);
   z-index: 1;
   position: relative;
 }

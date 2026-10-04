@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { formatDate } from '../../utils/date.js';
 import {
   createEmptyEntry,
   entriesFromDay,
+  entryTabLabel,
   hasValidEntries,
   readImageFile,
   serializeEntries,
@@ -13,22 +14,44 @@ import './DataModal.css';
 export function DataModal({ graph, day, onSave, onDelete, onClose }) {
   const hasData = day.value > 0;
   const [entries, setEntries] = useState(() => entriesFromDay(day));
+  const [activeId, setActiveId] = useState(() => entriesFromDay(day)[0]?.id ?? null);
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [imageError, setImageError] = useState(null);
+  const imageInputRef = useRef(null);
+
+  const activeEntry = entries.find((e) => e.id === activeId) ?? entries[0];
+
+  useEffect(() => {
+    if (!entries.some((e) => e.id === activeId)) {
+      setActiveId(entries[0]?.id ?? null);
+    }
+  }, [entries, activeId]);
 
   function updateEntry(id, updates) {
     setEntries((prev) => prev.map((entry) => (entry.id === id ? { ...entry, ...updates } : entry)));
   }
 
   function addEntry() {
-    setEntries((prev) => [...prev, createEmptyEntry()]);
+    const entry = createEmptyEntry();
+    setEntries((prev) => [...prev, entry]);
+    setActiveId(entry.id);
   }
 
   function removeEntry(id) {
     setEntries((prev) => {
-      const next = prev.filter((entry) => entry.id !== id);
-      return next.length > 0 ? next : [createEmptyEntry()];
+      const idx = prev.findIndex((e) => e.id === id);
+      const next = prev.filter((e) => e.id !== id);
+      if (next.length === 0) {
+        const blank = createEmptyEntry();
+        setActiveId(blank.id);
+        return [blank];
+      }
+      if (activeId === id) {
+        const neighbor = next[Math.min(idx, next.length - 1)];
+        setActiveId(neighbor.id);
+      }
+      return next;
     });
   }
 
@@ -69,139 +92,147 @@ export function DataModal({ graph, day, onSave, onDelete, onClose }) {
   const isValid = hasValidEntries(entries);
   const totalQuantity = serializeEntries(entries).reduce((sum, entry) => sum + entry.quantity, 0);
 
+  if (!activeEntry) return null;
+
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal modal--data" onClick={(e) => e.stopPropagation()}>
-        <div className="modal__header">
-          <div>
-            <h2 className="modal__title">{formatDate(day.date)}</h2>
-            <p className="data-modal__graph-name">{graph.name}</p>
+    <div className="modal-overlay modal-overlay--popover" onClick={onClose}>
+      <div className="modal modal--data mac-sheet" onClick={(e) => e.stopPropagation()} role="dialog" aria-label={formatDate(day.date)}>
+        <div className="mac-titlebar mac-titlebar--sheet">
+          <div className="mac-titlebar__lights">
+            <button type="button" className="mac-light mac-light--close" onClick={onClose} aria-label="Close" />
+            <span className="mac-light mac-light--min" aria-hidden="true" />
+            <span className="mac-light mac-light--max" aria-hidden="true" />
           </div>
-          <button className="modal__close" onClick={onClose} aria-label="Close">✕</button>
+          <span className="mac-titlebar__title">{formatDate(day.date)}</span>
+          <span className="mac-titlebar__subtitle">{graph.name}</span>
         </div>
 
-        <form onSubmit={handleSubmit} className="modal__body data-modal__body">
-          <div className="data-modal__entries">
-            {entries.map((entry, index) => (
-              <div key={entry.id} className="data-modal__entry">
-                <div className="data-modal__entry-header">
-                  <span className="data-modal__entry-title">Entry {index + 1}</span>
-                  {(entries.length > 1 || hasData) && (
-                    <button
-                      type="button"
-                      className="data-modal__entry-remove"
-                      onClick={() => removeEntry(entry.id)}
-                    >
-                      Remove
-                    </button>
-                  )}
-                </div>
-
-                <label className="modal__field">
-                  <span className="modal__label">{graph.metricLabel}</span>
-                  <input
-                    className="modal__input data-modal__value-input"
-                    type="number"
-                    step="any"
-                    min="0"
-                    value={entry.quantity}
-                    onChange={(e) => updateEntry(entry.id, { quantity: e.target.value })}
-                    placeholder="Quantity"
-                  />
-                </label>
-
-                <label className="modal__field">
-                  <span className="modal__label">
-                    Description
-                    <span className="modal__label-hint">optional</span>
-                  </span>
-                  <textarea
-                    className="modal__input data-modal__note-input"
-                    value={entry.description}
-                    onChange={(e) => updateEntry(entry.id, { description: e.target.value })}
-                    placeholder="What did you do?"
-                    rows={2}
-                  />
-                </label>
-
-                <label className="modal__field">
-                  <span className="modal__label">
-                    Link
-                    <span className="modal__label-hint">optional</span>
-                  </span>
-                  <input
-                    className="modal__input"
-                    type="url"
-                    value={entry.link}
-                    onChange={(e) => updateEntry(entry.id, { link: e.target.value })}
-                    placeholder="https://…"
-                  />
-                </label>
-
-                <div className="modal__field">
-                  <span className="modal__label">
-                    Image
-                    <span className="modal__label-hint">optional</span>
-                  </span>
-                  <input
-                    className="modal__input data-modal__file-input"
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => {
-                      const file = e.target.files?.[0];
-                      e.target.value = '';
-                      if (file) handleImageChange(entry.id, file);
-                    }}
-                  />
-                  {entry.image && (
-                    <div className="data-modal__image-preview-wrap">
-                      <img src={entry.image} alt="" className="data-modal__image-preview" />
-                      <button
-                        type="button"
-                        className="data-modal__image-clear"
-                        onClick={() => updateEntry(entry.id, { image: '' })}
-                      >
-                        Remove image
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </div>
+        <form onSubmit={handleSubmit} className="data-modal__form">
+          <div className="mac-segmented data-modal__tabs" role="tablist" aria-label="Entries">
+            {entries.map((entry) => (
+              <button
+                key={entry.id}
+                type="button"
+                role="tab"
+                aria-selected={entry.id === activeId}
+                className={`mac-segmented__item${entry.id === activeId ? ' mac-segmented__item--active' : ''}`}
+                onClick={() => setActiveId(entry.id)}
+                title={entryTabLabel(entry)}
+              >
+                {entryTabLabel(entry)}
+              </button>
             ))}
+            <button
+              type="button"
+              className="mac-segmented__add"
+              onClick={addEntry}
+              aria-label="Add entry"
+              title="Add entry"
+            >
+              +
+            </button>
+          </div>
+
+          <div className="data-modal__pane" role="tabpanel">
+            <div className="data-modal__row">
+              <label className="data-modal__qty">
+                <span className="data-modal__qty-label">{graph.metricLabel}</span>
+                <input
+                  type="number"
+                  step="any"
+                  min="0"
+                  value={activeEntry.quantity}
+                  onChange={(e) => updateEntry(activeEntry.id, { quantity: e.target.value })}
+                  placeholder="0"
+                  autoFocus
+                />
+              </label>
+              {entries.length > 1 && (
+                <button
+                  type="button"
+                  className="data-modal__remove-tab mac-text-btn mac-text-btn--destructive"
+                  onClick={() => removeEntry(activeEntry.id)}
+                >
+                  Remove
+                </button>
+              )}
+            </div>
+
+            <input
+              className="mac-field"
+              type="text"
+              value={activeEntry.description}
+              onChange={(e) => updateEntry(activeEntry.id, { description: e.target.value })}
+              placeholder="Description"
+            />
+
+            <input
+              className="mac-field"
+              type="url"
+              value={activeEntry.link}
+              onChange={(e) => updateEntry(activeEntry.id, { link: e.target.value })}
+              placeholder="Link"
+            />
+
+            <div className="data-modal__attach-row">
+              <input
+                ref={imageInputRef}
+                className="data-modal__file-hidden"
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  e.target.value = '';
+                  if (file) handleImageChange(activeEntry.id, file);
+                }}
+              />
+              <button
+                type="button"
+                className="mac-chip-btn"
+                onClick={() => imageInputRef.current?.click()}
+              >
+                {activeEntry.image ? 'Change photo' : 'Add photo'}
+              </button>
+              {activeEntry.image && (
+                <>
+                  <img src={activeEntry.image} alt="" className="data-modal__thumb" />
+                  <button
+                    type="button"
+                    className="mac-text-btn"
+                    onClick={() => updateEntry(activeEntry.id, { image: '' })}
+                  >
+                    Clear
+                  </button>
+                </>
+              )}
+            </div>
           </div>
 
           {imageError && <p className="data-modal__error">{imageError}</p>}
 
-          <button type="button" className="data-modal__add-entry" onClick={addEntry}>
-            + Add another entry
-          </button>
-
-          {isValid && (
-            <p className="data-modal__total">
-              Day total: <strong>{totalQuantity}</strong> {graph.metricLabel}
-            </p>
-          )}
-
-          <div className="modal__footer">
-            {hasData && (
-              <button
-                type="button"
-                className="modal__btn data-modal__delete-btn"
-                onClick={handleDelete}
-                disabled={deleting}
-              >
-                {deleting ? 'Removing…' : 'Remove all data'}
-              </button>
-            )}
-            <div className="data-modal__footer-right">
-              <button type="button" className="modal__btn modal__btn--secondary" onClick={onClose}>
+          <div className="data-modal__footer">
+            <div className="data-modal__footer-left">
+              {hasData && (
+                <button
+                  type="button"
+                  className="mac-text-btn mac-text-btn--destructive"
+                  onClick={handleDelete}
+                  disabled={deleting}
+                >
+                  {deleting ? 'Clearing…' : 'Clear day'}
+                </button>
+              )}
+              {isValid && (
+                <span className="data-modal__total">
+                  Total <strong>{totalQuantity}</strong>
+                </span>
+              )}
+            </div>
+            <div className="data-modal__footer-actions">
+              <button type="button" className="mac-btn mac-btn--default" onClick={onClose}>
                 Cancel
               </button>
-              <button
-                type="submit"
-                className="modal__btn modal__btn--primary"
-                disabled={saving || !isValid}
-              >
+              <button type="submit" className="mac-btn mac-btn--primary" disabled={saving || !isValid}>
                 {saving ? 'Saving…' : 'Save'}
               </button>
             </div>

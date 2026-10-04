@@ -61,6 +61,33 @@ export function hasValidEntries(formEntries) {
   return serializeEntries(formEntries).length > 0;
 }
 
+export function entryTabLabel(entry) {
+  const link = entry.link?.trim();
+  const desc = entry.description?.trim();
+
+  if (link) {
+    try {
+      const url = new URL(link.includes('://') ? link : `https://${link}`);
+      const host = url.hostname.replace(/^www\./, '');
+      if (host) return host.length > 20 ? `${host.slice(0, 18)}…` : host;
+    } catch {
+      /* use raw link */
+    }
+    return link.length > 20 ? `${link.slice(0, 18)}…` : link;
+  }
+
+  if (desc) {
+    return desc.length > 20 ? `${desc.slice(0, 18)}…` : desc;
+  }
+
+  const quantity = parseFloat(entry.quantity);
+  if (Number.isFinite(quantity) && quantity > 0) {
+    return String(quantity);
+  }
+
+  return 'New';
+}
+
 export function readImageFile(file, maxBytes = 800_000) {
   return new Promise((resolve, reject) => {
     if (!file) {

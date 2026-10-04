@@ -141,8 +141,8 @@ export function DomainTabs({
           </div>
         )}
 
-        <button className="domain-tabs-bar__add-btn" onClick={onAdd} title="New domain">
-          + New sheet
+        <button type="button" className="domain-tabs-bar__add-btn mac-icon-btn" onClick={onAdd} title="New sheet">
+          +
         </button>
       </div>
     </div>
