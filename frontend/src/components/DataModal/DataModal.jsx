@@ -8,6 +8,7 @@ import {
   readImageFile,
   serializeEntries,
 } from '../../utils/entries.js';
+import { SleekAddButton } from '../SleekAddButton.jsx';
 import '../GraphModal/GraphModal.css';
 import './DataModal.css';
 
@@ -122,15 +123,11 @@ export function DataModal({ graph, day, onSave, onDelete, onClose }) {
                 {entryTabLabel(entry)}
               </button>
             ))}
-            <button
-              type="button"
-              className="mac-segmented__add"
+            <SleekAddButton
+              className="mac-sleek-add--segmented"
+              label="Add entry"
               onClick={addEntry}
-              aria-label="Add entry"
-              title="Add entry"
-            >
-              +
-            </button>
+            />
           </div>
 
           <div className="data-modal__pane" role="tabpanel">

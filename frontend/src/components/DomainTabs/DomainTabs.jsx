@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { SleekAddButton } from '../SleekAddButton.jsx';
 import './DomainTabs.css';
 
 export function DomainTabs({
@@ -141,9 +142,7 @@ export function DomainTabs({
           </div>
         )}
 
-        <button type="button" className="domain-tabs-bar__add-btn mac-icon-btn" onClick={onAdd} title="New sheet">
-          +
-        </button>
+        <SleekAddButton className="domain-tabs-bar__add-btn mac-sleek-add--toolbar" label="New sheet" onClick={onAdd} />
       </div>
     </div>
   );

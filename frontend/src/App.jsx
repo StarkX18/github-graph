@@ -4,6 +4,7 @@ import { GraphCard } from './components/GraphCard/GraphCard.jsx';
 import { DomainTabs } from './components/DomainTabs/DomainTabs.jsx';
 import { GraphModal } from './components/GraphModal/GraphModal.jsx';
 import { DataModal } from './components/DataModal/DataModal.jsx';
+import { SleekAddButton } from './components/SleekAddButton.jsx';
 
 export default function App() {
   const [domains, setDomains] = useState([]);
@@ -199,7 +200,7 @@ export default function App() {
           <span className="app-header__domain">{activeDomain.name}</span>
         )}
         {activeDomainId && (
-          <button type="button" className="app-header__add-graph mac-icon-btn" onClick={openAddGraph} title="Add graph">+</button>
+          <SleekAddButton className="app-header__add-graph mac-sleek-add--toolbar" label="Add graph" onClick={openAddGraph} />
         )}
       </header>
 

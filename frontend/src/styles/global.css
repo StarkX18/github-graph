@@ -157,24 +157,63 @@ button {
   box-shadow: 0 0.5px 2px rgba(0, 0, 0, 0.12), 0 0 0 0.5px rgba(0, 0, 0, 0.04);
 }
 
-.mac-segmented__add {
-  flex: 0 0 auto;
-  width: 26px;
+.mac-sleek-add {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
   padding: 0;
-  margin-left: 2px;
   border: 0;
-  border-radius: 5px;
+  border-radius: 6px;
   background: transparent;
   color: var(--mac-text-secondary);
-  font-size: 15px;
-  font-weight: 500;
-  line-height: 1;
   cursor: pointer;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    transform 0.12s ease,
+    box-shadow 0.15s ease;
 }
 
-.mac-segmented__add:hover {
-  background: rgba(255, 255, 255, 0.65);
+.mac-sleek-add__icon {
+  width: 11px;
+  height: 11px;
+  display: block;
+}
+
+.mac-sleek-add:hover {
   color: var(--mac-accent);
+  background: var(--mac-accent-soft);
+}
+
+.mac-sleek-add:active {
+  transform: scale(0.92);
+}
+
+.mac-sleek-add--segmented {
+  width: 24px;
+  height: 22px;
+  margin-left: 2px;
+  border-radius: 5px;
+}
+
+.mac-sleek-add--segmented:hover {
+  background: #ffffff;
+  box-shadow: 0 0.5px 2px rgba(0, 0, 0, 0.1), 0 0 0 0.5px rgba(0, 0, 0, 0.04);
+}
+
+.mac-sleek-add--toolbar {
+  width: 26px;
+  height: 24px;
+  border-radius: 6px;
+  border: 0.5px solid transparent;
+}
+
+.mac-sleek-add--toolbar:hover {
+  border-color: rgba(0, 122, 255, 0.35);
+  box-shadow: 0 0 0 3px var(--mac-accent-ring);
 }
 
 .mac-field {
@@ -269,29 +308,6 @@ button {
 
 .mac-text-btn--destructive {
   color: var(--mac-destructive);
-}
-
-.mac-icon-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 22px;
-  padding: 0;
-  border: 0.5px solid #b8b8b8;
-  border-radius: 6px;
-  background: linear-gradient(180deg, #ffffff 0%, #f0f0f0 100%);
-  color: var(--mac-text-secondary);
-  font-size: 16px;
-  font-weight: 500;
-  line-height: 1;
-  cursor: pointer;
-  box-shadow: 0 0.5px 0 rgba(255, 255, 255, 0.85) inset;
-}
-
-.mac-icon-btn:hover {
-  color: var(--mac-accent);
-  border-color: #9a9a9f;
 }
 
 /* —— App shell —— */
