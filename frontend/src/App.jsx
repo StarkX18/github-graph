@@ -164,7 +164,7 @@ export default function App() {
   if (loading) {
     return (
       <div className="page page--loading">
-        <p>Loading…</p>
+        <p className="page--loading__text">Loading your graphs…</p>
       </div>
     );
   }
@@ -181,7 +181,20 @@ export default function App() {
   return (
     <div className="app-layout">
       <header className="app-header">
-        <span className="app-header__brand">activity graphs</span>
+        <span className="app-header__brand">
+          <span className="app-header__mark" aria-hidden="true">
+            <span className="app-header__mark-cell app-header__mark-cell--0" />
+            <span className="app-header__mark-cell app-header__mark-cell--1" />
+            <span className="app-header__mark-cell app-header__mark-cell--2" />
+            <span className="app-header__mark-cell app-header__mark-cell--0" />
+            <span className="app-header__mark-cell app-header__mark-cell--3" />
+            <span className="app-header__mark-cell app-header__mark-cell--1" />
+            <span className="app-header__mark-cell app-header__mark-cell--0" />
+            <span className="app-header__mark-cell app-header__mark-cell--2" />
+            <span className="app-header__mark-cell app-header__mark-cell--3" />
+          </span>
+          Activity
+        </span>
         {activeDomain && (
           <span className="app-header__domain">{activeDomain.name}</span>
         )}
@@ -193,6 +206,7 @@ export default function App() {
       <main className="app-content">
         {domains.length === 0 ? (
           <div className="empty-state">
+            <div className="empty-state__icon" aria-hidden="true">◫</div>
             <p className="empty-state__title">No sheets yet</p>
             <p className="empty-state__subtitle">Create your first sheet to start tracking anything.</p>
             <button className="empty-state__btn" onClick={handleAddDomain}>

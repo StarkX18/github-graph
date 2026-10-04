@@ -1,12 +1,14 @@
+const EMPTY = 'rgba(255, 255, 255, 0.08)';
+
 export const COLOR_SCHEMES = {
-  green:  { label: 'Green',  levels: ['#ebedf0', '#9be9a8', '#40c463', '#30a14e', '#216e39'] },
-  blue:   { label: 'Blue',   levels: ['#ebedf0', '#b6d8f0', '#4a9dcc', '#1a6896', '#0d4a7a'] },
-  red:    { label: 'Red',    levels: ['#ebedf0', '#f0b8b8', '#e05050', '#b82020', '#800000'] },
-  purple: { label: 'Purple', levels: ['#ebedf0', '#d8b4f8', '#a855f7', '#7c3aed', '#4c1d95'] },
-  orange: { label: 'Orange', levels: ['#ebedf0', '#fed7aa', '#fb923c', '#ea580c', '#9a3412'] },
-  teal:   { label: 'Teal',   levels: ['#ebedf0', '#99f6e4', '#2dd4bf', '#0d9488', '#115e59'] },
-  pink:   { label: 'Pink',   levels: ['#ebedf0', '#fbcfe8', '#f472b6', '#db2777', '#9d174d'] },
-  yellow: { label: 'Yellow', levels: ['#ebedf0', '#fef08a', '#facc15', '#ca8a04', '#854d0e'] },
+  green:  { label: 'Green',  levels: [EMPTY, '#6ee7b7', '#34d399', '#10b981', '#059669'] },
+  blue:   { label: 'Blue',   levels: [EMPTY, '#7dd3fc', '#38bdf8', '#0ea5e9', '#0284c7'] },
+  red:    { label: 'Red',    levels: [EMPTY, '#fca5a5', '#f87171', '#ef4444', '#dc2626'] },
+  purple: { label: 'Purple', levels: [EMPTY, '#c4b5fd', '#a78bfa', '#8b5cf6', '#7c3aed'] },
+  orange: { label: 'Orange', levels: [EMPTY, '#fdba74', '#fb923c', '#f97316', '#ea580c'] },
+  teal:   { label: 'Teal',   levels: [EMPTY, '#5eead4', '#2dd4bf', '#14b8a6', '#0d9488'] },
+  pink:   { label: 'Pink',   levels: [EMPTY, '#f9a8d4', '#f472b6', '#ec4899', '#db2777'] },
+  yellow: { label: 'Yellow', levels: [EMPTY, '#fde047', '#facc15', '#eab308', '#ca8a04'] },
 };
 
-export const DEFAULT_SCHEME = 'green';
+export const DEFAULT_SCHEME = 'purple';

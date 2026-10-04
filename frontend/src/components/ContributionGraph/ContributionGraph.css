@@ -4,14 +4,26 @@
 
 .activity-panel__scroll {
   overflow-x: auto;
-  padding-bottom: 8px;
+  padding-bottom: 10px;
+  margin: 0 -4px;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+.activity-panel__scroll::-webkit-scrollbar {
+  height: 6px;
+}
+
+.activity-panel__scroll::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
 }
 
 .contribution-graph {
   display: grid;
-  grid-template-columns: 30px max-content;
-  grid-template-rows: 18px max-content;
-  gap: 4px 8px;
+  grid-template-columns: 32px max-content;
+  grid-template-rows: 20px max-content;
+  gap: 6px 10px;
   min-width: max-content;
 }
 
@@ -21,8 +33,10 @@
   grid-template-columns: repeat(53, var(--cell-size));
   column-gap: var(--cell-gap);
   color: var(--muted);
-  font-size: 12px;
-  line-height: 18px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 20px;
+  letter-spacing: 0.02em;
 }
 
 .contribution-graph__month-label {
@@ -35,7 +49,8 @@
   grid-template-rows: repeat(7, var(--cell-size));
   row-gap: var(--cell-gap);
   color: var(--muted);
-  font-size: 12px;
+  font-size: 11px;
+  font-weight: 600;
   line-height: var(--cell-size);
   text-align: left;
 }
@@ -55,9 +70,10 @@
   height: var(--cell-size);
   padding: 0;
   border: 0;
-  border-radius: 2px;
+  border-radius: 3px;
   background: var(--level-0);
   cursor: default;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
 
 .contribution-cell[data-level="0"] { background: var(--level-0); }
@@ -68,8 +84,10 @@
 
 .contribution-cell:hover,
 .contribution-cell:focus-visible {
-  outline: 1px solid rgba(27, 31, 36, 0.35);
-  outline-offset: 1px;
+  transform: scale(1.15);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.25);
+  z-index: 1;
+  position: relative;
 }
 
 .contribution-cell--clickable {
@@ -77,14 +95,12 @@
 }
 
 .contribution-cell--today {
-  outline: 2px solid var(--text);
-  outline-offset: 1px;
+  box-shadow: 0 0 0 2px var(--accent);
 }
 
 .contribution-cell--today:hover,
 .contribution-cell--today:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 1px;
+  box-shadow: 0 0 0 2px var(--accent), 0 0 12px var(--accent-glow);
 }
 
 .contribution-cell--future {
