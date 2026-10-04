@@ -22,7 +22,7 @@ export const api = {
   deleteGraph: (id) => request('DELETE', `/graphs/${id}`),
 
   getData: (graphId) => request('GET', `/data/graph/${graphId}`),
-  setData: (graphId, date, value, note) =>
-    request('PUT', `/data/graph/${graphId}/${date}`, { value, note }),
+  setData: (graphId, date, entries) =>
+    request('PUT', `/data/graph/${graphId}/${date}`, { entries }),
   deleteData: (graphId, date) => request('DELETE', `/data/graph/${graphId}/${date}`),
 };

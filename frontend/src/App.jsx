@@ -146,9 +146,9 @@ export default function App() {
     setDataModal({ graph, day });
   }
 
-  async function handleSaveData(date, value, note) {
+  async function handleSaveData(date, entries) {
     const { graph } = dataModal;
-    await api.setData(graph.id, date, value, note);
+    await api.setData(graph.id, date, entries);
     await refreshGraphData(graph.id);
   }
 
